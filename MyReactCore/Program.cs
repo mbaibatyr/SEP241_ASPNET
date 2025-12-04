@@ -1,4 +1,8 @@
 
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using MyReactCore.Abstract;
+using MyReactCore.Service;
+
 namespace MyReactCore
 {
     public class Program
@@ -6,8 +10,22 @@ namespace MyReactCore
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddScoped<ICream, CreameService>();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAnyCorsPolicy",
+                    builder => builder
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                    );
+            });
 
-            // Add services to the container.
+            //builder.Services.AddSpaStaticFiles(configuration =>
+            //{
+            //    configuration.RootPath = "ClientApp/build";
+            //});
+
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -22,10 +40,20 @@ namespace MyReactCore
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseCors("AllowAnyCorsPolicy");
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 
+            //app.UseSpa(spa =>
+            //{
+            //    spa.Options.SourcePath = "ClientApp";
 
+            //    if (app.Environment.IsDevelopment())
+            //    {
+            //        spa.UseReactDevelopmentServer(npmScript: "start");
+            //    }
+            //});
             app.MapControllers();
 
             app.Run();
