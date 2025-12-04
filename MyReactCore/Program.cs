@@ -13,11 +13,11 @@ namespace MyReactCore
             builder.Services.AddScoped<ICream, CreameService>();
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAnyCorsPolicy",
+                options.AddPolicy("AllowAll",
                     builder => builder
+                         .AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .AllowCredentials()
                     );
             });
 
@@ -40,7 +40,7 @@ namespace MyReactCore
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            app.UseCors("AllowAnyCorsPolicy");
+            app.UseCors("AllowAll");
             app.UseStaticFiles();
 
             app.UseAuthorization();
@@ -60,3 +60,24 @@ namespace MyReactCore
         }
     }
 }
+
+/*
+ const fetchData = () => {
+    // setLoading(true);
+    console.log('123333')
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+    };
+    fetch(`http://localhost:5423/IceCream/GetIceCream`, requestOptions)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data)
+        // setLoading(false);
+        // setData(data);
+        // setQty("Найдено: " + data.length);
+      });
+  };
+ */
